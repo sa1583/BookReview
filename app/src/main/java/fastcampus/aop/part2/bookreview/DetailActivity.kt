@@ -2,7 +2,6 @@ package fastcampus.aop.part2.bookreview
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.room.Room
 import com.bumptech.glide.Glide
 import fastcampus.aop.part2.bookreview.databinding.ActivityDetailBinding
 import fastcampus.aop.part2.bookreview.model.Book
@@ -17,11 +16,7 @@ class DetailActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "BookSearchDB"
-        ).build()
+        db = getAppDatabase(this)
 
         val model = intent.getParcelableExtra<Book>("bookModel")
 

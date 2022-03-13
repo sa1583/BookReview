@@ -1,16 +1,15 @@
 package fastcampus.aop.part2.bookreview
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import fastcampus.aop.part2.bookreview.adapter.BookAdapter
 import fastcampus.aop.part2.bookreview.adapter.HistoryAdapter
 import fastcampus.aop.part2.bookreview.api.BookService
@@ -40,11 +39,7 @@ class MainActivity : AppCompatActivity() {
         initHistoryRecyclerView()
         initSearchEditText()
 
-        db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "BookSearchDB"
-        ).build()
+        db = getAppDatabase(this)
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://openapi.naver.com")
@@ -126,6 +121,7 @@ class MainActivity : AppCompatActivity() {
         binding.historyRecyclerView.adapter = historyAdapter
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initSearchEditText() {
         binding.searchEditText.setOnKeyListener { view, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == MotionEvent.ACTION_DOWN) {
@@ -136,7 +132,7 @@ class MainActivity : AppCompatActivity() {
             return@setOnKeyListener false
         }
 
-        binding.searchEditText.setOnTouchListener { v, event ->
+        binding.searchEditText.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 showHistoryView()
             }
@@ -150,7 +146,7 @@ class MainActivity : AppCompatActivity() {
 
             runOnUiThread {
                 binding.historyRecyclerView.isVisible = true
-                historyAdapter.submitList(keywords.orEmpty())
+                historyAdapter.submitList(keywords)
             }
         }.start()
         binding.historyRecyclerView.isVisible = true
