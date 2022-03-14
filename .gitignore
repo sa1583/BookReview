@@ -85,3 +85,6 @@ lint/tmp/
 # lint/reports/
 
 .idea
+
+# api key
+app/src/main/res/values/api_key.xml
